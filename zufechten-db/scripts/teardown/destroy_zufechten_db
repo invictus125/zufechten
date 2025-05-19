@@ -1,0 +1,5 @@
+#!/bin/sh
+
+./remove_data
+
+psql -f ../../schema/full_teardown.sql

@@ -119,19 +119,20 @@ CREATE TABLE EventFencer (
 
 --Match record setup--
 
-CREATE TABLE MatchFencerAccolade (
+CREATE TABLE MatchUpdate (
     id              bigint GENERATED ALWAYS AS IDENTITY,
-    type            varchar(64) NOT NULL,
+    type            varchar(32) NOT NULL,
     match_fencer_id bigint references MatchFencer(id) NOT NULL,
-    count           int NOT NULL DEFAULT 0,
-    UNIQUE(type, match_fencer_id)
+    match_id        bigint references Match(id) NOT NULL,
+    value           double precision NOT NULL DEFAULT 0,
+    new_match_state json NOT NULL
 );
 
-CREATE INDEX accolade_fencer_type ON MatchFencerAccolade(type, match_fencer_id);
+CREATE INDEX match_update_fencer_type ON MatchUpdate(type, match_fencer_id, match_id);
 
 CREATE TABLE MatchFencerPenalty (
     id              bigint GENERATED ALWAYS AS IDENTITY,
-    type            varchar(64) NOT NULL,
+    type            varchar(32) NOT NULL,
     match_fencer_id bigint references MatchFencer(id) NOT NULL,
     count           int NOT NULL DEFAULT 0,
     UNIQUE(type, match_fencer_id)
