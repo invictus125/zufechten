@@ -1,0 +1,3 @@
+#!/bin/sh
+
+psql -d Zufechten -f ../../schema/init.sql

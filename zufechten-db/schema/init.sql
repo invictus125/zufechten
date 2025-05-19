@@ -1,8 +1,6 @@
-CREATE DATABASE Zufechten;
-
 --User and Club basic entity setup--
 
-CREATE TABLE User (
+CREATE TABLE IF NOT EXISTS User (
     id          bigint GENERATED ALWAYS AS IDENTITY,
     username    varchar(64) NOT NULL CONSTRAINT uniq_username UNIQUE,
     auth_hash   varchar(64),
@@ -13,7 +11,7 @@ CREATE TABLE User (
     bio_info    text,
 );
 
-CREATE TABLE Club (
+CREATE TABLE IF NOT EXISTS Club (
     id              bigint GENERATED ALWAYS AS IDENTITY,
     owner_id        bigint references User(id) NOT NULL,
     name            varchar(128) NOT NULL CONSTRAINT uniq_name UNIQUE,
@@ -23,7 +21,7 @@ CREATE TABLE Club (
     info            text,
 );
 
-CREATE TABLE UserClub (
+CREATE TABLE IF NOT EXISTS UserClub (
     id          bigint GENERATED ALWAYS AS IDENTITY,
     user_id     bigint references User(id) NOT NULL,
     club_id     bigint references Club(id) NOT NULL,
@@ -33,7 +31,7 @@ CREATE TABLE UserClub (
 
 --Tournament basic entity setup--
 
-CREATE TABLE Tournament (
+CREATE TABLE IF NOT EXISTS Tournament (
     id              bigint GENERATED ALWAYS AS IDENTITY,
     organizer_id    bigint references User(id) NOT NULL,
     name            varchar(64) NOT NULL CONSTRAINT uniq_name UNIQUE,
@@ -44,7 +42,7 @@ CREATE TABLE Tournament (
     location        json NOT NULL DEFAULT '{}',
 );
 
-CREATE TABLE TournamentClub (
+CREATE TABLE IF NOT EXISTS TournamentClub (
     id              bigint GENERATED ALWAYS AS IDENTITY,
     name            varchar(64) NOT NULL,
     tournament_id   bigint references Tournament(id) NOT NULL,
@@ -52,7 +50,7 @@ CREATE TABLE TournamentClub (
     UNIQUE(name, tournament_id)
 );
 
-CREATE TABLE Event (
+CREATE TABLE IF NOT EXISTS Event (
     id              bigint GENERATED ALWAYS AS IDENTITY,
     name            varchar(64) NOT NULL,
     tournament_id   bigint references Tournament(id) NOT NULL,
@@ -61,23 +59,23 @@ CREATE TABLE Event (
     status          int NOT NULL DEFAULT 0
 );
 
-CREATE TABLE Pool (
+CREATE TABLE IF NOT EXISTS Pool (
     id          bigint GENERATED ALWAYS AS IDENTITY,
     event_id    bigint references Event(id) NOT NULL
 );
 
-CREATE TABLE Eliminations (
+CREATE TABLE IF NOT EXISTS Eliminations (
     id          bigint GENERATED ALWAYS AS IDENTITY,
     event_id    bigint references Event(id) NOT NULL,
     config      json NOT NULL DEFAULT '{}'
 );
 
-CREATE TABLE Match (
+CREATE TABLE IF NOT EXISTS Match (
     id      bigint GENERATED ALWAYS AS IDENTITY,
     status  int NOT NULL DEFAULT 0
 );
 
-CREATE TABLE Fencer (
+CREATE TABLE IF NOT EXISTS Fencer (
     id                  bigint GENERATED ALWAYS AS IDENTITY,
     alias               varchar(64) NOT NULL,
     user_id             bigint references User(id),
@@ -87,21 +85,21 @@ CREATE TABLE Fencer (
 
 --Relation type setup--
 
-CREATE TABLE PoolMatch (
+CREATE TABLE IF NOT EXISTS PoolMatch (
     id          bigint GENERATED ALWAYS AS IDENTITY,
     pool_id     bigint references Pool(id) NOT NULL,
     match_id    bigint references Match(id) NOT NULL,
     UNIQUE(pool_id, match_id)
 );
 
-CREATE TABLE ElimMatch (
+CREATE TABLE IF NOT EXISTS ElimMatch (
     id          bigint GENERATED ALWAYS AS IDENTITY,
     elim_id     bigint references Eliminations(id) NOT NULL,
     match_id    bigint references Match(id) NOT NULL,
     UNIQUE(elim_id, match_id)
 );
 
-CREATE TABLE MatchFencer (
+CREATE TABLE IF NOT EXISTS MatchFencer (
     id          bigint GENERATED ALWAYS AS IDENTITY,
     match_id    bigint references Match(id) NOT NULL,
     fencer_id   bigint references Fencer(id) NOT NULL,
@@ -109,7 +107,7 @@ CREATE TABLE MatchFencer (
     UNIQUE(match_id, fencer_id)
 );
 
-CREATE TABLE EventFencer (
+CREATE TABLE IF NOT EXISTS EventFencer (
     id          bigint GENERATED ALWAYS AS IDENTITY,
     event_id    bigint references Event(id) NOT NULL,
     fencer_id   bigint references Fencer(id) NOT NULL,
@@ -119,7 +117,7 @@ CREATE TABLE EventFencer (
 
 --Match record setup--
 
-CREATE TABLE MatchUpdate (
+CREATE TABLE IF NOT EXISTS MatchUpdate (
     id              bigint GENERATED ALWAYS AS IDENTITY,
     type            varchar(32) NOT NULL,
     match_fencer_id bigint references MatchFencer(id) NOT NULL,
@@ -128,9 +126,9 @@ CREATE TABLE MatchUpdate (
     new_match_state json NOT NULL
 );
 
-CREATE INDEX match_update_fencer_type ON MatchUpdate(type, match_fencer_id, match_id);
+CREATE INDEX IF NOT EXISTS match_update_fencer_type ON MatchUpdate(type, match_fencer_id, match_id);
 
-CREATE TABLE MatchFencerPenalty (
+CREATE TABLE IF NOT EXISTS MatchFencerPenalty (
     id              bigint GENERATED ALWAYS AS IDENTITY,
     type            varchar(32) NOT NULL,
     match_fencer_id bigint references MatchFencer(id) NOT NULL,
@@ -138,4 +136,4 @@ CREATE TABLE MatchFencerPenalty (
     UNIQUE(type, match_fencer_id)
 );
 
-CREATE INDEX penalty_fencer_type ON MatchFencerPenalty(type, match_fencer_id);
+CREATE INDEX IF NOT EXISTS penalty_fencer_type ON MatchFencerPenalty(type, match_fencer_id);

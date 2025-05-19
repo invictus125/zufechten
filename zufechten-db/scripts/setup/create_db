@@ -1,0 +1,5 @@
+#!/bin/sh
+
+psql -c 'CREATE DATABASE Zufechten;'
+
+psql -d Zufechten -f ../../schema/init.sql
