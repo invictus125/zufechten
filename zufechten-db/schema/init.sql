@@ -119,6 +119,7 @@ CREATE TABLE IF NOT EXISTS EventFencer (
 
 CREATE TABLE IF NOT EXISTS MatchUpdate (
     id              bigint GENERATED ALWAYS AS IDENTITY,
+    timestamp       timestamp NOT NULL DEFAULT now(),
     type            varchar(32) NOT NULL,
     match_fencer_id bigint references MatchFencer(id) NOT NULL,
     match_id        bigint references Match(id) NOT NULL,
