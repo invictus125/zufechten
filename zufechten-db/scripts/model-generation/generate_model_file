@@ -1,0 +1,3 @@
+#!/bin/sh
+
+python -m sqlacodegen --generator dataclasses postgresql://zufechten:changeme@localhost:5432 > ../../../zufechten-api/src/models/models.py

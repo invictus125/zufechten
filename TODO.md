@@ -1,17 +1,9 @@
 # Database
 
-- Test schema creation
-- Dockerize
-- Migration setup (script for running migrations)
-
 # API
 
 - Figure out OAuth
-- Decide on framework / language
-    - Java
-    - Kotlin
-    - Rust
-    - Python
+- Set up user creation / update / login flow
 - MQTT for updates?
     - {tournament id}/{event id}/(pool | elims)/{pool | elims id}/{match id}
 
