@@ -1,0 +1,1 @@
+fastapi dev ../src/api.py
