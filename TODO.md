@@ -4,6 +4,7 @@
 
 - Figure out OAuth
 - Set up user creation / update / login flow
+    - Email verification
 - MQTT for updates?
     - {tournament id}/{event id}/(pool | elims)/{pool | elims id}/{match id}
 
