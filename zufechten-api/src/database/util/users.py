@@ -1,5 +1,5 @@
 from sqlmodel import select
-from models.models import Zufechtenuser
+from database.models import Zufechtenuser
 from database.database import SessionDep
 
 

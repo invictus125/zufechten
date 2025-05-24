@@ -1,10 +1,19 @@
 # Database
 
+- Set config via env
+
 # API
 
 - Figure out OAuth
+    - Use scopes
+- Get settings from ENV
+    - security key
+    - token expiration
+    - DB info
+- SQL injection defense
 - Set up user creation / update / login flow
     - Email verification
+    - Lock down register endpoint
 - MQTT for updates?
     - {tournament id}/{event id}/(pool | elims)/{pool | elims id}/{match id}
 
